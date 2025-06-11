@@ -1,8 +1,7 @@
-from ollama import Client
+from ollama import chat
 
 class OllamaModel:
     def __init__(self, model_name: str):
-        self.client = Client()
         self.model_name = model_name
     
 
@@ -10,32 +9,26 @@ class OllamaModel:
         """
         Chat with the Ollama model about the data
         """
-        try:
-            response = self.client.generate(
-                model=self.model_name,
-                prompt=prompt
-            )
-            return response.response
-        except Exception as e:
-            return f"Error: {str(e)}"
+        messages = [
+            {"role": "user", "content": prompt}
+        ]
 
-
-    def chat(self):
-        print(f"Chat with {self.model_name} (type 'quit' to exit)")
-        
         while True:
-            prompt = input("\nYou: ").strip()
-            if prompt.lower() == 'quit':
-                break
-                
             try:
-                response = self.client.generate(
+                response = chat(
                     model=self.model_name,
-                    prompt=prompt
+                    messages=messages
                 )
-                print(f"\n{response.response}")
+                print(f"\n{response['message']['content']}")
+                messages.append({"role": "assistant", "content": response["message"]["content"]})
             except Exception as e:
-                print(f"Error: {str(e)}")
+                return f"Error: {str(e)}"
+
+            new_prompt = input("You: ")
+            if new_prompt.lower() == "quit":
+                break
+            
+            messages.append({"role": "user", "content": new_prompt})
 
 
     def prompt_template(self, data_type: str, results: dict):
