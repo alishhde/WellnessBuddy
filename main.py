@@ -2,6 +2,8 @@ from src.models.anomaly_detector import AnomalyDetector
 from src.models.ollama_client import OllamaModel
 from src.utils.sample_data_generator import generate_sample_sleep_data, generate_multiple_anomalies_sleep_data
 from src.apis.googleFitAPI import GoogleFitAPI
+import os
+import dotenv
 
 
 class WellnessBuddy:
@@ -95,4 +97,7 @@ class WellnessBuddy:
 
 
 if __name__ == '__main__':
-    wellness_buddy = WellnessBuddy(model_name="llama3.1")
+
+    dotenv.load_dotenv()
+    model_name = os.getenv("MODEL_NAME")
+    wellness_buddy = WellnessBuddy(model_name=model_name)
