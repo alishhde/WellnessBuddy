@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List, Dict, Any
-from src.apis.googleFitAPI import extract_sleep_durations
+from src.apis.googleFitAPI import GoogleFitAPI
+
 
 class AnomalyDetector:
     def __init__(self, threshold_multiplier: float = 1.5):
@@ -13,18 +14,17 @@ class AnomalyDetector:
         """
         self.threshold_multiplier = threshold_multiplier
 
-    def detect_sleep_anomalies(self, sleep_data: Dict[str, Any]) -> Dict[str, Any]:
+
+    def detect_sleep_anomalies(self, sleep_records: Dict[str, Any]) -> Dict[str, Any]:
         """
         Detect all anomalies in the sleep data.
         
         Args:
-            sleep_data (Dict): Sleep data
+            sleep_records (Dict): Sleep data
             
         Returns:
             Dict: Contains anomaly information and statistics
         """
-        # (temporary) Extract durations with timestamps using the Google Fit API utility
-        sleep_records = extract_sleep_durations(sleep_data)
         
         if not sleep_records:
             return {
